@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Prendre rendez-vous</title>
+  <meta name="description" content="Réservez votre soin en ligne en quelques clics.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="./"><span data-salon="name"></span><small data-salon="tagline"></small></a>
+      <a class="btn sm" data-salon-href="phone">📞 <span data-salon="phone"></span></a>
+    </div>
+  </header>
+
+  <section class="hero">
+    <h1>Prendre rendez-vous</h1>
+    <p>Choisissez votre soin, votre créneau, c'est réservé.</p>
+  </section>
+
+  <main class="container narrow">
+    <nav class="steps" id="steps"></nav>
+
+    <!-- Étape 1 : prestation -->
+    <section class="card" data-step="1">
+      <h2>Quel soin vous ferait plaisir ?</h2>
+      <div id="services"></div>
+    </section>
+
+    <!-- Étape 2 : date & heure -->
+    <section class="card hidden" data-step="2">
+      <div class="section-head">
+        <h2>Quand souhaitez-vous venir ?</h2>
+        <button class="btn sm ghost" data-back>← Changer de soin</button>
+      </div>
+      <p class="muted small" id="chosen-service"></p>
+
+      <div class="field">
+        <label>Avec</label>
+        <div class="chips" id="staff-chips"></div>
+      </div>
+      <div class="field">
+        <label>Jour</label>
+        <div class="days" id="days"></div>
+      </div>
+      <div class="field">
+        <label id="slots-label">Heure</label>
+        <div id="slots"></div>
+      </div>
+    </section>
+
+    <!-- Étape 3 : coordonnées -->
+    <section class="card hidden" data-step="3">
+      <div class="section-head">
+        <h2>Vos coordonnées</h2>
+        <button class="btn sm ghost" data-back>← Changer d'horaire</button>
+      </div>
+      <div class="summary" id="summary" style="margin-bottom:18px"></div>
+      <form id="contact-form" novalidate>
+        <div class="grid-2">
+          <div class="field">
+            <label for="f-first">Prénom *</label>
+            <input id="f-first" name="first" required autocomplete="given-name">
+          </div>
+          <div class="field">
+            <label for="f-last">Nom *</label>
+            <input id="f-last" name="last" required autocomplete="family-name">
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="field">
+            <label for="f-phone">Téléphone *</label>
+            <input id="f-phone" name="phone" type="tel" required autocomplete="tel" placeholder="06 12 34 56 78">
+          </div>
+          <div class="field">
+            <label for="f-email">E-mail</label>
+            <input id="f-email" name="email" type="email" autocomplete="email">
+          </div>
+        </div>
+        <div class="field">
+          <label for="f-notes">Une précision ? (allergie, première visite…)</label>
+          <textarea id="f-notes" name="notes" rows="2"></textarea>
+        </div>
+        <p class="alert hidden" id="form-error"></p>
+        <button class="btn primary" type="submit" style="width:100%;justify-content:center;padding:12px">Confirmer le rendez-vous</button>
+      </form>
+    </section>
+
+    <!-- Étape 4 : confirmation -->
+    <section class="card hidden" data-step="4" style="text-align:center">
+      <div class="success-icon">✓</div>
+      <h2>C'est réservé !</h2>
+      <p class="muted">Nous avons hâte de vous accueillir.</p>
+      <div class="summary" id="confirm-summary" style="text-align:left;margin:18px 0"></div>
+      <div class="btn-row" style="justify-content:center">
+        <button class="btn" id="ics-btn">📅 Ajouter à mon agenda</button>
+        <button class="btn primary" id="restart-btn">Prendre un autre RDV</button>
+      </div>
+      <p class="small muted" style="margin-top:18px">Un empêchement ? Merci de nous prévenir au moins 24h à l'avance au <span data-salon="phone"></span>.</p>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div><strong data-salon="name"></strong> · <span data-salon="address"></span></div>
+    <div id="hours-line" style="margin-top:4px"></div>
+    <div style="margin-top:10px"><a href="institut.html">Espace institut</a></div>
+  </footer>
+
+  <script src="js/config.js"></script>
+  <script src="js/core.js"></script>
+  <script src="js/client.js"></script>
+</body>
+</html>
