@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Espace institut</title>
+  <meta name="robots" content="noindex">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="institut.html"><span data-salon="name"></span><small>Espace institut</small></a>
+      <div class="tabs" role="tablist">
+        <button class="tab active" data-tab="planning">Planning</button>
+        <button class="tab" data-tab="recap">Récap du jour</button>
+      </div>
+      <button class="btn primary" id="new-btn">+ Nouveau RDV</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="toolbar">
+      <div class="datenav">
+        <button class="btn sm" id="prev-day" aria-label="Jour précédent">‹</button>
+        <button class="btn sm" id="today-btn">Aujourd'hui</button>
+        <button class="btn sm" id="next-day" aria-label="Jour suivant">›</button>
+        <h2 id="day-title"></h2>
+        <input type="date" id="date-input" aria-label="Choisir une date">
+      </div>
+      <a class="btn sm ghost no-print" href="./" target="_blank">Voir la page client ↗</a>
+    </div>
+
+    <!-- ===== PLANNING ===== -->
+    <section id="tab-planning">
+      <div class="kpis" id="day-kpis"></div>
+      <div id="closed-msg" class="alert info hidden">L'institut est fermé ce jour-là.</div>
+      <div class="agenda-wrap" id="agenda-wrap">
+        <div class="agenda" id="agenda"></div>
+      </div>
+      <p class="small muted">Astuce : cliquez sur une case vide du planning pour créer un RDV à cette heure-là, ou sur un RDV pour le modifier / l'encaisser.</p>
+
+      <div class="card" style="margin-top:16px">
+        <h3>Liste des rendez-vous</h3>
+        <div class="table-wrap" id="day-list"></div>
+      </div>
+      <div id="demo-box" class="no-print" style="margin-top:16px"></div>
+    </section>
+
+    <!-- ===== RÉCAP ===== -->
+    <section id="tab-recap" class="hidden">
+      <div id="recap-alerts"></div>
+      <div class="kpis" id="recap-kpis"></div>
+
+      <div class="recap-grid">
+        <div class="card">
+          <h3>Par esthéticienne</h3>
+          <div class="table-wrap" id="recap-staff"></div>
+        </div>
+        <div class="card">
+          <h3>Encaissements</h3>
+          <div class="table-wrap" id="recap-pay"></div>
+        </div>
+        <div class="card">
+          <h3>Prestations réalisées</h3>
+          <div class="table-wrap" id="recap-services"></div>
+        </div>
+        <div class="card">
+          <h3>Absences & annulations</h3>
+          <div class="table-wrap" id="recap-missed"></div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:16px">
+        <h3>Remarques de la journée</h3>
+        <div class="grid-2">
+          <div class="field">
+            <label for="recap-author">Récap rédigé par</label>
+            <select id="recap-author"></select>
+          </div>
+          <div class="field">
+            <label for="recap-cash">Fond de caisse en fin de journée (€)</label>
+            <input id="recap-cash" type="number" step="0.01" min="0" placeholder="Optionnel">
+          </div>
+        </div>
+        <div class="field">
+          <label for="recap-notes">Incidents, produits à commander, infos pour demain…</label>
+          <textarea id="recap-notes" rows="3"></textarea>
+        </div>
+      </div>
+
+      <div class="card no-print" style="margin-top:16px">
+        <div class="section-head">
+          <h3>Envoyer le récapitulatif</h3>
+          <span class="small muted" id="recap-sent"></span>
+        </div>
+        <pre class="recap-text" id="recap-text"></pre>
+        <div class="btn-row" style="margin-top:12px">
+          <button class="btn primary" id="send-mail">✉️ Envoyer par e-mail</button>
+          <button class="btn" id="send-wa">💬 WhatsApp</button>
+          <button class="btn" id="copy-recap">📋 Copier le texte</button>
+          <button class="btn" id="print-recap">🖨️ Imprimer / PDF</button>
+          <button class="btn" id="export-csv">⬇️ Export CSV</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===== Fenêtre RDV ===== -->
+  <dialog id="bk-dialog">
+    <form id="bk-form" method="dialog">
+      <div class="dlg-head">
+        <h2 id="bk-title" style="margin:0">Nouveau rendez-vous</h2>
+        <button type="button" class="btn ghost sm" data-close aria-label="Fermer">✕</button>
+      </div>
+      <div class="dlg-body">
+        <div class="grid-2">
+          <div class="field">
+            <label for="bk-name">Cliente *</label>
+            <input id="bk-name" required placeholder="Prénom Nom">
+          </div>
+          <div class="field">
+            <label for="bk-phone">Téléphone</label>
+            <input id="bk-phone" type="tel">
+          </div>
+        </div>
+        <div class="field">
+          <label for="bk-service">Prestation *</label>
+          <select id="bk-service" required></select>
+        </div>
+        <div class="grid-2">
+          <div class="field">
+            <label for="bk-staff">Esthéticienne *</label>
+            <select id="bk-staff" required></select>
+          </div>
+          <div class="field">
+            <label for="bk-source">Origine</label>
+            <select id="bk-source">
+              <option value="surplace">Sur place</option>
+              <option value="telephone">Téléphone</option>
+              <option value="enligne">En ligne</option>
+            </select>
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="field">
+            <label for="bk-date">Date *</label>
+            <input id="bk-date" type="date" required>
+          </div>
+          <div class="field">
+            <label for="bk-time">Heure *</label>
+            <select id="bk-time" required></select>
+          </div>
+        </div>
+        <p class="alert hidden" id="bk-warn"></p>
+
+        <div class="field">
+          <label>Statut</label>
+          <div class="status-pick" id="bk-status"></div>
+        </div>
+        <div class="grid-2">
+          <div class="field">
+            <label for="bk-price">Prix facturé (€)</label>
+            <input id="bk-price" type="number" step="0.01" min="0">
+          </div>
+          <div class="field">
+            <label for="bk-pay">Paiement</label>
+            <select id="bk-pay"><option value="">—</option></select>
+          </div>
+        </div>
+        <div class="field">
+          <label for="bk-notes">Notes</label>
+          <textarea id="bk-notes" rows="2"></textarea>
+        </div>
+        <p class="small muted" id="bk-meta"></p>
+      </div>
+      <div class="dlg-foot">
+        <button type="button" class="btn danger" id="bk-delete">Supprimer</button>
+        <div class="btn-row">
+          <button type="button" class="btn" data-close>Annuler</button>
+          <button type="submit" class="btn primary" id="bk-save">Enregistrer</button>
+        </div>
+      </div>
+    </form>
+  </dialog>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="js/config.js"></script>
+  <script src="js/core.js"></script>
+  <script src="js/institut.js"></script>
+</body>
+</html>
